@@ -4,7 +4,6 @@ import com.recuperacao.vila.config.database.JDBCConfig;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.List;
 
 @Repository
 public class UserDAO {
