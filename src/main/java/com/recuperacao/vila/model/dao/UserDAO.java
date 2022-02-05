@@ -10,7 +10,7 @@ import java.util.List;
 public class UserDAO {
 
     // Cria um novo usuário com base em um habitante
-    public void create(String email, String password, Long habitanteId) throws SQLException, IllegalAccessException {
+    public void create(String email, String password, Long habitanteId) throws SQLException {
         Connection connection = new JDBCConfig().getConnection();
         PreparedStatement ps = connection.prepareStatement("INSERT INTO \"user\" (email, password, habitante_id) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, email);

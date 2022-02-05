@@ -1,7 +1,6 @@
 package com.recuperacao.vila.auth;
 
 import com.recuperacao.vila.config.database.JDBCConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -11,20 +10,23 @@ import java.util.*;
 @Repository
 public class ApplicationUserDAOImpl implements ApplicationUserDAO {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private  final PasswordEncoder passwordEncoder;
+
+    public ApplicationUserDAOImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Optional<ApplicationUser> selectApplicationUserByEmail(String email) {
-        Connection connection = null;
+
         try {
-            connection = new JDBCConfig().getConnection();
+            Connection connection = new JDBCConfig().getConnection();
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"user\" WHERE email = ?", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, email);
             ps.execute();
             ResultSet rs = ps.getResultSet();
 
-            Optional<ApplicationUser> user = null;
+            Optional<ApplicationUser> user = Optional.empty();
 
             while (rs.next()) {
                 String username = rs.getString("email");
@@ -37,8 +39,8 @@ public class ApplicationUserDAOImpl implements ApplicationUserDAO {
             connection.close();
             return user;
         } catch (SQLException sqlException) {
-            System.out.println("Erro");
+            System.out.println("...");
         }
-        return null;
+        return Optional.empty();
     }
 }
